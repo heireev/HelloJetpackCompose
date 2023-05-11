@@ -3,8 +3,13 @@ package com.reev.hellojetpackcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
@@ -58,8 +63,8 @@ fun HelloJetpackComposeApp() {
 @Composable
 fun GreetingList(names: List<String>) {
     if (names.isNotEmpty()) {
-        Column {
-            for (name in names) {
+        LazyColumn {
+            items(names) { name ->
                 Greeting(name)
             }
         }
@@ -77,8 +82,15 @@ fun HelloJetpackComposeAppPreview() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(name: String) {
     var isExpanded by remember { mutableStateOf(false) }
+    val animatedSizeDp by animateDpAsState(
+        targetValue = if (isExpanded) 120.dp else 80.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
 
     Row(
         modifier = Modifier.padding(8.dp),
@@ -87,7 +99,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.jetpack_compose),
             contentDescription = "Logo jetpack Compose",
-            modifier = Modifier.size(80.dp)
+            modifier = Modifier.size(animatedSizeDp)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column (modifier = Modifier.weight(1f)) {
