@@ -13,25 +13,61 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.reev.hellojetpackcompose.ui.theme.HelloJetpackComposeTheme
 
+private val sampleName = listOf(
+    "Andre",
+    "Desta",
+    "Parto",
+    "Wendy",
+    "Komeng",
+    "Raffi Ahmad",
+    "Andhika Pratama",
+    "Vincent Ryan Rompies"
+)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             HelloJetpackComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
+                HelloJetpackComposeApp()
             }
         }
+    }
+}
+
+@Composable
+fun HelloJetpackComposeApp() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        GreetingList(sampleName)
+    }
+}
+
+@Composable
+fun GreetingList(names: List<String>) {
+    if (names.isNotEmpty()) {
+        Column {
+            for (name in names) {
+                Greeting(name)
+            }
+        }
+    } else {
+        Text("No people to great : (")
+    }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Composable
+fun HelloJetpackComposeAppPreview() {
+    HelloJetpackComposeTheme {
+        HelloJetpackComposeApp()
     }
 }
 
@@ -62,6 +98,6 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     HelloJetpackComposeTheme {
-        Greeting("Rifqi")
+        Greeting("Jetpack Compose")
     }
 }
